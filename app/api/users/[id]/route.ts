@@ -3,9 +3,13 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const GET = async (request: NextRequest, { params }: { params: { id: string } }) => {
+export const GET = async (request: NextRequest, 
+    { 
+        params 
+    }: { params: Promise<{ id: string }> }) => {
     try {
-        const userId = parseInt(params.id, 10); // Convertir l'ID en nombre
+        const resolvedParams = await params; // Attendre la résolution de la Promise
+        const userId = parseInt(resolvedParams.id, 10); // Convertir l'ID en nombre
 
         if (isNaN(userId)) {
             return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
@@ -26,9 +30,14 @@ export const GET = async (request: NextRequest, { params }: { params: { id: stri
     }
 };
 
-export const PUT = async (request: NextRequest, { params }: { params: { id: string } }) => {
+export const PUT = async (request: NextRequest, 
+    { 
+        params 
+    }: { params: Promise<{ id: string }> }) => {
     try {
-        const userId = parseInt(params.id, 10);
+        const resolvedParams = await params; // Attendre la résolution de la Promise
+        const userId = parseInt(resolvedParams.id, 10); // Convertir l'ID en nombre
+
         if (isNaN(userId)) {
             return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
         }
